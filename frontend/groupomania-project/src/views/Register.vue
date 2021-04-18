@@ -64,7 +64,7 @@
               v-model="password"
             />
           </div>
-          <button class="btn btn-primary" @click="register">Submit</button>
+          <button class="btn btn-primary" @click.prevent="register">Submit</button>
         </form>
       </div>
       <div class="col-md-3"></div>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-//import axios from "axios";
+import axios from "axios";
 export default {
   name: "register",
   data() {
@@ -88,33 +88,19 @@ export default {
   methods: {
     register() {
       debugger;
-    //   axios.post('http://localhost:3000/api/auth/signup', { 
-    //       name: this.name,
-    //       surname: this.surname,
-    //       username: this.username,
-    //       email: this.email,
-    //       password: this.password
-    //   }, {
-    //       headers: {
-    //         'Content-Type': 'application/x-www-form-urlencoded'
-    //       }
-    //   })
-    fetch('http://localhost:3000/api/auth/signup', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: {
-            name: this.name,
-            surname: this.surname,
-            username: this.username,
-            email: this.email,
-            password: this.password
-        }
-    })
-      .then((response) => response.json())
+      axios.post('http://localhost:3000/api/auth/signup', { 
+          name: this.name,
+          surname: this.surname,
+          username: this.username,
+          email: this.email,
+          password: this.password
+      }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+      })
       .then((response) => console.log(response))
-      .catch((error) => console.log(error))
+      .catch((error) => console.log({ error: error }))
     }
   },
 };
