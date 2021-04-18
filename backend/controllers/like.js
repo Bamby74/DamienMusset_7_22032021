@@ -30,7 +30,7 @@ exports.likePost = (req, res) => {
                 publicationId: publicationId
             })
             .then(likeCreated => res.status(201).json({ message: 'Vous aimez cette publication !' }))
-            .catch(error => res.status(401).json({ error: 'Impossible de liker cette publicstion !' }))
+            .catch(error => res.status(401).json({ error: 'Impossible de liker cette publication !' }))
         }
     })
     .catch(error => res.status(500).json(error))
