@@ -9,7 +9,6 @@ const likeRoutes = require('./routes/like');
 
 const app = express();
 
-
 //app.use('./api/auth', userRoutes);
 
 app.use((req, res, next) => {

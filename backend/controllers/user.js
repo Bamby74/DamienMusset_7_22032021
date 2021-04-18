@@ -31,7 +31,7 @@ exports.signup = (req, res, next) => {
           username,
         })
           .then((newUser) =>
-            res.status(201).json({ message: "Utilsateur créé !" })
+            res.status(201).json({ message: "Utilisateur créé !" })
           )
           .catch((error) =>
             res
