@@ -1,15 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 
-//const userRoutes = require('.routes/user');
 const publicationRoutes = require('./routes/publication');
 const userRoutes = require('./routes/user');
 const likeRoutes = require('./routes/like');
+const commentRoutes = require('./routes/comment');
 
 
 const app = express();
-
-//app.use('./api/auth', userRoutes);
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -21,9 +20,11 @@ app.use((req, res, next) => {
 app.use(express.urlencoded())
 app.use(express.json());
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 app.use('/api/publications', publicationRoutes);
 app.use('/api/auth', userRoutes);
-//app.use('/api/', likeRoutes);
-app.use('/api/like', likeRoutes)
+app.use('/api/like', likeRoutes);
+app.use('/api/comments', commentRoutes);
 
 module.exports = app;

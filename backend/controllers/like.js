@@ -10,26 +10,26 @@ exports.likePost = (req, res) => {
     }
     Like.findOne({
         where: { 
-            userId: req.userId,
-            publicationId:  publicationId
+            userid: req.token.userId,
+            publicationid:  publicationId
         }    
     })
     .then(likeFound => {
         if(likeFound){
             Like.destroy({
                 where: {
-                    userId: likeFound.userId,
-                    publicationId: likeFound.publicationId
+                    userid: likeFound.userid,
+                    publicationid: likeFound.publicationid
                 }
             })
-            .then(likeDestroyed => res.status(200).json({ message: 'Vous n\'aimez plus cette publication !' }))
+            .then(likeDestroyed => res.status(200).json(likeDestroyed))
             .catch(error => res.status(400).json({ error: 'Impossible de disliker cette publication !' }))
         }else{
             Like.create({
-                userId: req.userId,
-                publicationId: publicationId
+                userid: req.token.userId,
+                publicationid: publicationId
             })
-            .then(likeCreated => res.status(201).json({ message: 'Vous aimez cette publication !' }))
+            .then(likeCreated => res.status(201).json(likeCreated))
             .catch(error => res.status(401).json({ error: 'Impossible de liker cette publication !' }))
         }
     })

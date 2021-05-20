@@ -1,5 +1,4 @@
 const {Sequelize, DataTypes} = require('sequelize');
-const sequelize = require('../config/db.config');
 const db = require('../config/db.config');
 const User = require('./user');
 
@@ -15,7 +14,7 @@ const Post = () => {
     attachment: {
       type: DataTypes.STRING,
     },
-    userId: {
+    user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -24,7 +23,9 @@ const Post = () => {
       }
     }
   })
-  Publication.belongsTo(User);
+  Publication.belongsTo(User, {
+    foreignKey: 'user_id',
+  });
   return Publication
 }
 

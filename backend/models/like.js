@@ -1,28 +1,49 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const db = require('../config/db.config');
+const { stack } = require('../routes/publication');
 const Publication = require('./publications');
 const User = require('./user');
 
 const likePosted = () => {
     const Like = db.define('likes', {
-        publicationId: {
+        publicationid: {
             type: DataTypes.INTEGER,
             references: {
                 model: Publication,
                 key: 'id'
             }
         },
-        userId: {
+        userid: {
             type: DataTypes.INTEGER,
-            model: User,
-            key: 'id'
+            references: {
+                model: User,
+                key: 'id'
+            }
         }
     })
-    User.belongsToMany(Publication, {through: Like});
-    Publication.belongsToMany(User, {through: Like});
+    User.belongsToMany(Publication, {
+        onDelete: 'CASCADE',
+        through: Like,
+        foreignKey: 'userid',
+        otherkey: 'publicationid'
+    });
 
-    Like.belongsTo(User);
-    Like.belongsTo(Publication);
+    Publication.belongsToMany(User, {
+        onDelete: 'CASCADE',
+        through: Like,
+        foreignKey: 'publicationid',
+        otherKey: 'userid'
+    });
+
+    Like.belongsTo(User, {
+        foreignKey: 'userid',
+        // as: 'user',
+    });
+
+    Like.belongsTo(Publication, {
+        foreignKey: 'publicationid',
+        // as: 'publication',
+    });
     return Like
 }
 

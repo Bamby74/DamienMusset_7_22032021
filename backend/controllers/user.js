@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 const db = require("../config/db.config");
 const User = require("../models/user");
 
+let JWT_TOKEN = "095883nedfnejcnjdw94584o2dmenx39r2";
+
 exports.signup = (req, res, next) => {
   User.findOne({
     where: { email: req.body.email },
@@ -30,10 +32,17 @@ exports.signup = (req, res, next) => {
           password,
           username,
         })
-          .then((newUser) =>
-            res.status(201).json({ message: "Utilisateur créé !" })
-          )
-          .catch((error) =>
+        .then((newUser) =>
+          res.status(201).json({ 
+            userId: newUser.id,
+            token: jwt.sign(
+                { userId: newUser.id },
+                JWT_TOKEN,
+                { expiresIn: "24h" }
+              ),
+          })
+        )
+        .catch((error) =>
             res
               .status(400)
               .json({ error: "Impossible d'ajouter cet utilisateur !" })
@@ -64,7 +73,7 @@ exports.login = (req, res) => {
                 userId: userFound.id,
                 token: jwt.sign(
                     { userId: userFound.id },
-                    "095883nedfnejcnjdw94584o2dmenx39r2",
+                    JWT_TOKEN,
                     { expiresIn: "24h" }
                 ),
             });
@@ -77,7 +86,7 @@ exports.login = (req, res) => {
 exports.getUserProfil = (req, res) => {
   User.findOne({
     attributes: ["id", "name", "surname", "email", "username"],
-    where: { id: req.userId },
+    where: { id: req.token.userId },
   })
     .then((user) => {
       if (!user) {
@@ -93,7 +102,7 @@ exports.updateUserProfil = (req, res) => {
 
   User.findOne({
     attributes: ["id", "username"],
-    where: { id: req.userId },
+    where: { id: req.token.userId },
   })
     .then((userFound) => {
       userFound
@@ -103,3 +112,16 @@ exports.updateUserProfil = (req, res) => {
     })
     .catch((error) => res.status(400).json(error));
 };
+
+exports.deleteUserProfil = (req, res) => {
+  User.findOne({
+    where: { id: req.token.userId },
+  })
+    .then((userFound) => {
+      userFound
+        .destroy()
+        .then((userDestroyed) => res.status(200).json({ message: "Compte supprimé!" }))
+        .catch(error => res.status(500).json(error))
+    })
+    .catch(error => res.status(400).json(error))
+}
