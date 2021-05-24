@@ -1,15 +1,15 @@
 <template>
     <div>
-        <div class="row">
+        <section class="row">
             <Publication :publication="publication"/>
-        </div>
-        <div class="row" v-for="comment in allComments" :key="comment.id">
-            <Comment v-if="allComments" :comment="comment"/>
-        </div>
-        <div class="row">
+        </section>
+        <section class="row" v-for="comment in allComments" :key="comment.id">
+            <Comment v-if="allComments.length > 0" :comment="comment"/>
+            <p v-else>Soyez le premier à commenter cette publication !</p>
+        </section>
+        <section class="row">
             <WritingComment />
-        </div>
-        <p v-if="!allComments">Aucun commentaires encore laissé pour ce post ...</p>
+        </section>
     </div>
 </template>
 
@@ -31,7 +31,7 @@ export default {
     data() {
         return {
             publication : this.Publication,
-            content: ""
+            content: "",
         }
     },
     props: ['comments'],
@@ -59,8 +59,8 @@ export default {
         }
     },   
     created() {
-        this.getPublication();
-        this.getComments();
+        this.getPublication()
+        this.getComments()
     }
 };
 </script>
@@ -78,5 +78,10 @@ export default {
 svg {
   position: relative;
   top: 2px;
+}
+p {
+    margin: 20px 0px;
+    font-weight: bold;
+    font-size: 1.5em
 }
 </style>

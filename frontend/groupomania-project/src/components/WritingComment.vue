@@ -59,4 +59,9 @@ textarea {
     border-color: rgba(175, 174, 174, 0.282);
     margin-bottom: 20px;
 }
+textarea:focus {
+    outline: 0 none;
+    border-color: rgb(147, 17, 43, 0.282);
+    box-shadow: 0 0 0 0.2rem rgba(147, 17, 43, 0.282)
+}
 </style>

@@ -10,7 +10,7 @@
 export default {
     name: 'Like',
     props: ["publication"],
-    
+
 }
 </script>
 

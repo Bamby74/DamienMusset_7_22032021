@@ -33,6 +33,7 @@ export default {
 }
 h6 {
     color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-weight: bold;
     margin: 0px;
     font-size: 0.6em;
