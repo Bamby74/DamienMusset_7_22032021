@@ -17,7 +17,7 @@
                 <textarea class="form-control" id="title" name="title" rows="3" placeholder="Title..." v-model="title"></textarea>
                 <br />
                 <textarea class="form-control" id="exampleFormControlTextarea1" name="content" rows="3" placeholder="Message..." v-model="content"></textarea>
-                <img src="" class="img-fluid" alt="..." v-show="file">
+                <img id="image-preview" src="" class="img-fluid" alt="photo de commentaire" v-show="file" >
             </div>
             <div class="row-link">
                 <a href="#" class="btn btn-danger" @click.prevent="post">
@@ -31,6 +31,11 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="35" fill="currentColor" class="bi bi-image" viewBox="0 0 16 16">
                         <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                         <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/>
+                    </svg>
+                </div>
+                <div class="btn btn-danger" id="close-picture" v-show="file" @click="file = ''">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="35" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
                     </svg>
                 </div>
             </div>
@@ -93,10 +98,17 @@ export default {
             if(imageToPost === 0) {
                 console.log("Aucune image sélectionnée !")
             }else{
-                return this.file = imageToPost[0]
+                let previewImage = document.getElementById('image-preview')
+                this.file = imageToPost[0]
+                const reader = new FileReader()
+                reader.addEventListener("load", function() {
+                    previewImage.setAttribute("src", this.result)
+                })
+                reader.readAsDataURL(this.file)
+                // reader.readAsText(input.files[0])
             }
         }
-    },
+    }
 }
 </script>
 
@@ -138,9 +150,16 @@ a p {
 ul {
     justify-content: space-between;
 }
-ul svg {
+ul svg, span svg {
     width: 40px;
     cursor: pointer;
     color:rgb(222, 35, 61);
+}
+#close-picture {
+    margin-left: 10px;
+}
+img {
+    margin-top: 10px;
+    border-radius: 10px;
 }
 </style>

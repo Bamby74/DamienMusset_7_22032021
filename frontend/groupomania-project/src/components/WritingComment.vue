@@ -1,7 +1,7 @@
 <template>
-    <div class="col-6 mx-auto">
+    <div class="col-10 mx-auto">
         <textarea class="form-control" id="content-comment" v-model="content" name="comment" placeholder="Que voulez-vous dire ?"></textarea>
-        <button class="btn btn-danger" @click.prevent="postComment">Envoyer</button>
+        <button class="btn btn-danger" @click.prevent="postComment">Commenter</button>
     </div>
 </template>
 

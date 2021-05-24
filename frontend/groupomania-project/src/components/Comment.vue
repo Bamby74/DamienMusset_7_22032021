@@ -1,5 +1,5 @@
 <template>
-    <div class="col-6 mx-auto ">
+    <div class="col-10 mx-auto ">
         <div class="col card card-body">
             <h6>{{ comment.username}}</h6>
             <p class="card-text text-light">{{ comment.content }}</p>
@@ -22,7 +22,7 @@ export default {
     padding: 0px;
 }
 .card {
-    background: rgb(199, 17, 46);
+    background-color: rgba(199, 17, 46);
     margin-top: 5px;
     margin-bottom: 5px;
     height: auto;

@@ -1,6 +1,6 @@
 <template>
     <div class="postCard">
-        <div class="row" v-for="publication in allPublications" :key="publication.id">
+        <div class="row" v-for="publication in allPublications" :key="-publication.id">
             <Publication :publication="publication" />
         </div>
     </div>

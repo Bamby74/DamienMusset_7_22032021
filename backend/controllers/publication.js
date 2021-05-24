@@ -10,7 +10,13 @@ exports.getPublication = (req, res, next) => {
     let offset = parseInt(req.query.offset);
     let order = req.query.order;
 
-    db.query("SELECT  p.*, users.username, c, countcoments FROM publications AS p LEFT JOIN users ON users.id = p.user_id LEFT JOIN (SELECT likes.publicationid, COUNT (userid) AS c FROM likes GROUP BY publicationid) AS likecount on publicationid = p.id LEFT JOIN (SELECT coments.publication_id, COUNT (user_id) AS countcoments FROM coments GROUP BY publication_id) AS comentscount ON publication_id = p.id", { type: QueryTypes.SELECT,raw: true, logging: console.log })
+    db.query(`SELECT  p.*, users.username, c, countcoments FROM publications AS p 
+                LEFT JOIN users ON users.id = p.user_id 
+                LEFT JOIN (SELECT likes.publicationid, COUNT (userid) AS c FROM likes GROUP BY publicationid) 
+                    AS likecount on publicationid = p.id 
+                LEFT JOIN (SELECT coments.publication_id, COUNT (user_id) AS countcoments FROM coments GROUP BY publication_id)
+                    AS comentscount ON publication_id = p.id`, 
+        { type: QueryTypes.SELECT,raw: true, logging: console.log })
     .then(publications => {
         if(publications){
             res.status(200).json(publications)
@@ -23,7 +29,12 @@ exports.getPublication = (req, res, next) => {
 
 exports.getOnePublication = (req, res, next) => {
     let publicationId = req.params.publicationId
-    db.query(`SELECT publications.*, users.username FROM publications,users WHERE publications.id = ${publicationId}  AND publications.user_id = users.id `)
+    db.query(`SELECT publications.*, users.username, c, countcoments FROM publications,users 
+                LEFT JOIN (SELECT likes.publicationid, COUNT(userid) AS c FROM likes GROUP BY publicationid)
+                    AS likecount ON publicationid = ${publicationId} 
+                LEFT JOIN (SELECT coments.publication_id, COUNT (user_id) AS countcoments FROM coments GROUP BY publication_id)
+                    AS comentscount ON publication_id = ${publicationId} 
+                WHERE publications.id = ${publicationId} AND publications.user_id = users.id `)
     .then(publication => {
         res.status(200).json(publication)
     })
