@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="col-10 mx-auto home">
     <div id="image-container">
       <img id="logo-groupomania" class="img-fluid" alt="groupomania logo" src="../assets/icon-above-font.png" /><br />
       <HelloWorld msg="Bienvenue sur votre réseau social d'entreprise !" /><br />

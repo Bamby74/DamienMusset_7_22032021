@@ -1,9 +1,11 @@
 <template>
+<transition name="clear-appear">
     <div class="postCard">
         <div class="row" v-for="publication in allPublications" :key="-publication.id">
             <Publication :publication="publication" />
         </div>
     </div>
+</transition>
 </template>
 
 <script>

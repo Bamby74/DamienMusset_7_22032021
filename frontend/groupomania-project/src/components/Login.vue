@@ -1,39 +1,40 @@
 <template>
-<div class="container">
+<main class="container">
     <h1>Connectez-vous</h1>
     <br />
     <br />
-    <div class="row">
-      <div class="col-6 mx-auto">
-        <form>
-          <div class="mb-3">
+    <section class="row">
+      <form class="col-6 mx-auto">
+        <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label"
-              >Adresse mail</label
+                >Adresse mail</label
             >
             <input
-              type="email"
-              class="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="email"
+                type="email"
+                class="form-control"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="email"
             />
-          </div>
-          <div class="mb-3">
+            </div>
+        <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label"
-              >Mot de passe</label
+                >Mot de passe</label
             >
             <input
-              type="password"
-              class="form-control"
-              id="exampleInputPassword1"
-              v-model="password"
+                type="password"
+                class="form-control"
+                id="exampleInputPassword1"
+                v-model="password"
             />
-          </div>
-          <button  class="btn btn-danger" @click.prevent="login">Connexion</button>
-        </form>
-      </div>
-    </div>
-</div>
+        </div>
+        <div class="alert-danger" v-if="error">
+            <p>Votre email ou votre mot de passe est incorrect !<br/><br/> Vérifiez vos identifiants de connexion et réessayer de vous connecter ...</p>
+        </div>
+        <button  class="btn btn-danger" @click.prevent="login">Connexion</button>
+      </form>
+    </section>
+</main>
 </template>
 
 <script>
@@ -45,6 +46,7 @@ export default {
         return {
             email: "",
             password: "",
+            error: false
         }
     },
     methods: {
@@ -58,12 +60,22 @@ export default {
                 localStorage.setItem('token',token);
                 this.$router.push({ name: "publications" });
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                this.error =true
+                console.log(error)
+            })
         }
-    },
+    }
 }
 </script>
 
-<style>
-
+<style scoped>
+.alert-danger {
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+p {
+    margin: 0px;
+}
 </style>
