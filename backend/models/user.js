@@ -1,5 +1,6 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const db = require('../config/db.config');
+<<<<<<< HEAD
 const Publication = require('./publications');
 
 const User = db.define('user', {
@@ -14,6 +15,10 @@ const User = db.define('user', {
       key: 'user_id'
     }
   },
+=======
+
+const User = db.define('user', {
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
   name: {
     type: DataTypes.STRING,
     allowNull: false
@@ -25,7 +30,10 @@ const User = db.define('user', {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
+<<<<<<< HEAD
     unique: true
+=======
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
   },
   password: {
     type: DataTypes.STRING,
@@ -35,10 +43,13 @@ const User = db.define('user', {
     type: DataTypes.STRING,
     allowNull: false
   },
+<<<<<<< HEAD
   isAdmin: {
     type: DataTypes.BOOLEAN,
     allowNull: false
   }
+=======
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
 })
 
 module.exports = User ;

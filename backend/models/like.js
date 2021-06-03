@@ -1,18 +1,26 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const db = require('../config/db.config');
+<<<<<<< HEAD
 const { stack } = require('../routes/publication');
+=======
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
 const Publication = require('./publications');
 const User = require('./user');
 
 const likePosted = () => {
     const Like = db.define('likes', {
+<<<<<<< HEAD
         publicationid: {
+=======
+        publicationId: {
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
             type: DataTypes.INTEGER,
             references: {
                 model: Publication,
                 key: 'id'
             }
         },
+<<<<<<< HEAD
         userid: {
             type: DataTypes.INTEGER,
             references: {
@@ -44,6 +52,19 @@ const likePosted = () => {
         foreignKey: 'publicationid',
         // as: 'publication',
     });
+=======
+        userId: {
+            type: DataTypes.INTEGER,
+            model: User,
+            key: 'id'
+        }
+    })
+    User.belongsToMany(Publication, {through: Like});
+    Publication.belongsToMany(User, {through: Like});
+
+    Like.belongsTo(User);
+    Like.belongsTo(Publication);
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
     return Like
 }
 

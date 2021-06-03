@@ -2,9 +2,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../config/db.config");
 const User = require("../models/user");
+<<<<<<< HEAD
 require('dotenv').config();
 
 let JWT_TOKEN = process.env.TOKEN_KEY;
+=======
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
 
 exports.signup = (req, res, next) => {
   User.findOne({
@@ -24,15 +27,21 @@ exports.signup = (req, res, next) => {
           email: req.body.email,
           password: hash,
           username: req.body.username,
+<<<<<<< HEAD
           isAdmin: false
         };
         let { name, surname, email, password, username, isAdmin } = data;
+=======
+        };
+        let { name, surname, email, password, username } = data;
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
         User.create({
           name,
           surname,
           email,
           password,
           username,
+<<<<<<< HEAD
           isAdmin
         })
         .then((newUser) =>{
@@ -47,6 +56,13 @@ exports.signup = (req, res, next) => {
           })
         })
         .catch((error) =>
+=======
+        })
+          .then((newUser) =>
+            res.status(201).json({ message: "Utilsateur créé !" })
+          )
+          .catch((error) =>
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
             res
               .status(400)
               .json({ error: "Impossible d'ajouter cet utilisateur !" })
@@ -77,10 +93,16 @@ exports.login = (req, res) => {
                 userId: userFound.id,
                 token: jwt.sign(
                     { userId: userFound.id },
+<<<<<<< HEAD
                     JWT_TOKEN,
                     { expiresIn: "24h" },
                     ),
                 isAdmin: userFound.isAdmin
+=======
+                    "095883nedfnejcnjdw94584o2dmenx39r2",
+                    { expiresIn: "24h" }
+                ),
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
             });
           })
         .catch((error) => res.status(500).json({ error }));
@@ -91,7 +113,11 @@ exports.login = (req, res) => {
 exports.getUserProfil = (req, res) => {
   User.findOne({
     attributes: ["id", "name", "surname", "email", "username"],
+<<<<<<< HEAD
     where: { id: req.token.userId },
+=======
+    where: { id: req.userId },
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
   })
     .then((user) => {
       if (!user) {
@@ -107,7 +133,11 @@ exports.updateUserProfil = (req, res) => {
 
   User.findOne({
     attributes: ["id", "username"],
+<<<<<<< HEAD
     where: { id: req.token.userId },
+=======
+    where: { id: req.userId },
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
   })
     .then((userFound) => {
       userFound
@@ -117,6 +147,7 @@ exports.updateUserProfil = (req, res) => {
     })
     .catch((error) => res.status(400).json(error));
 };
+<<<<<<< HEAD
 
 exports.deleteUserProfil = (req, res) => {
   User.findOne({
@@ -130,3 +161,5 @@ exports.deleteUserProfil = (req, res) => {
     })
     .catch(error => res.status(400).json(error))
 }
+=======
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)

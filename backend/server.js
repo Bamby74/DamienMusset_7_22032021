@@ -1,6 +1,12 @@
 const http = require('http');
+<<<<<<< HEAD
 const app = require('./app')
 require ('dotenv').config();
+=======
+const app = require('./app');
+const db = require('./mysql');
+
+>>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
 
 const normalizePort = val => {
     const port = parseInt(val, 10);
