@@ -27,25 +27,18 @@ exports.signup = (req, res, next) => {
           email: req.body.email,
           password: hash,
           username: req.body.username,
-<<<<<<< HEAD
           isAdmin: false
         };
         let { name, surname, email, password, username, isAdmin } = data;
-=======
-        };
-        let { name, surname, email, password, username } = data;
->>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
         User.create({
           name,
           surname,
           email,
           password,
           username,
-<<<<<<< HEAD
           isAdmin
         })
         .then((newUser) =>{
-        console.log(newUser)
           res.status(201).json({ 
             userId: newUser.id,
             token: jwt.sign(
@@ -56,13 +49,6 @@ exports.signup = (req, res, next) => {
           })
         })
         .catch((error) =>
-=======
-        })
-          .then((newUser) =>
-            res.status(201).json({ message: "Utilsateur créé !" })
-          )
-          .catch((error) =>
->>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
             res
               .status(400)
               .json({ error: "Impossible d'ajouter cet utilisateur !" })
