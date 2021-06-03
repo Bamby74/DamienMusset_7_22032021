@@ -119,11 +119,7 @@ exports.updateUserProfil = (req, res) => {
 
   User.findOne({
     attributes: ["id", "username"],
-<<<<<<< HEAD
     where: { id: req.token.userId },
-=======
-    where: { id: req.userId },
->>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
   })
     .then((userFound) => {
       userFound
@@ -133,7 +129,6 @@ exports.updateUserProfil = (req, res) => {
     })
     .catch((error) => res.status(400).json(error));
 };
-<<<<<<< HEAD
 
 exports.deleteUserProfil = (req, res) => {
   User.findOne({
@@ -147,5 +142,3 @@ exports.deleteUserProfil = (req, res) => {
     })
     .catch(error => res.status(400).json(error))
 }
-=======
->>>>>>> 64cf00f (Ajout dossier backend et dossier frontend)
