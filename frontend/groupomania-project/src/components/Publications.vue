@@ -1,11 +1,9 @@
 <template>
-<transition name="clear-appear">
-    <div class="postCard">
-        <div class="row" v-for="publication in allPublications" :key="-publication.id">
+    <section class="postCard">
+        <div class="row" v-for="publication in allPublications.slice().reverse()" :key="publication.id">
             <Publication :publication="publication" />
         </div>
-    </div>
-</transition>
+    </section>
 </template>
 
 <script>
@@ -18,11 +16,10 @@ export default {
     },
     name: 'Publications',
     props: ["publications"],
+    computed: mapGetters(['allPublications']),
     methods: {
         ...mapActions(['fetchPublications','checkNavButton']),
-        
     },
-    computed: mapGetters(['allPublications']),
     created() {
         this.fetchPublications();
         this.checkNavButton();

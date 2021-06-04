@@ -1,16 +1,22 @@
 <template>
-    <div v-if="publication" class="card col-10 mx-auto">
+    <article v-if="publication" class="card col-10 mx-auto">
         <div class="card-header">
-            <h5>{{ publication.username }}</h5>
+            <div class="d-flex justify-content-between">
+                <h5>{{ publication.username }}</h5>
+                <svg v-if="userAdmin" id="rubish" @click="deletedPublication" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                </svg>
+            </div>
             <p class="card-text" >{{ setDate(publication.updatedAt) }}</p>
         </div>
         <div class="card-body">
             <h5 class="card-title">{{ publication.title }}</h5>
             <p class="card-text">{{ publication.content }}</p>
-            <img v-if="publication.attachment" :src="publication.attachment">
+            <img v-if="publication.attachment && findTypeFile() == 'image'" :src="publication.attachment" alt="image de publication">
+            <video v-else-if="publication.attachment &&  findTypeFile() == 'video'" :src="publication.attachment" alt="video de la publication" controls></video>
             <div class="icones-nav row justify-content-around">
                 <div class="col-4 text-center">
-                    <svg @click="likedPublication" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-hand-thumbs-up-fill text-danger" viewBox="0 0 16 16">
+                    <svg @click="likedPublication"  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-hand-thumbs-up-fill" :class="isLikeByUser()" viewBox="0 0 16 16">
                         <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a9.84 9.84 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733.058.119.103.242.138.363.077.27.113.567.113.856 0 .289-.036.586-.113.856-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.163 3.163 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.82 4.82 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
                     </svg>
                     <span>{{ (publication.c === 0 || publication.c == null) ? "0" : publication.c}}</span>
@@ -23,7 +29,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </article>
 </template>
 
 <script>
@@ -35,16 +41,53 @@ export default {
     name: "Publication",
     props: ["publication"],
     mixins: [setDate],
+    data() {
+        return {
+            userAdmin: false,
+            color: ""
+        }
+    },
     methods: {
-        ...mapActions(['likePublication']),
+        ...mapActions(['likePublication','deletePublication']),
+        isLikeByUser() {
+            if(this.publication.userLike) {
+                 return this.color = "text-success"
+            }
+            return this.color = "text-danger"
+        },
         likedPublication() {
             this.likePublication(this.publication)
         },
         getComments() {
             localStorage.setItem('publicationId', this.publication.id);
-            this.$router.push({ name: "comments"})
+            this.$router.push("/comments")
+        },
+        findTypeFile() {
+            const fileAttachment = this.publication.attachment
+            if(fileAttachment) {
+                const fileType = fileAttachment.split('.')
+                let typeImage = ["jpeg","jpg","png","gif"]
+                if(typeImage.indexOf(fileType[2]) !== -1) {
+                    return "image"
+                }
+                let typeVideo = ["mp4","wov","avi","wmf"]
+                if(typeVideo.indexOf(fileType[2]) !== -1) {
+                    return "video"
+                }
+            }
+        },
+        adminLow() {
+            if(localStorage.getItem('admin') === "true") {
+                this.userAdmin = true
+            }
+        },
+        deletedPublication() {
+            this.deletePublication(this.publication)
         }
-    }
+    },
+    created() {
+        this.adminLow();
+    },
 }
 </script>
 
@@ -59,7 +102,7 @@ export default {
 .card-header, .card-body {
     text-align: left;
 }
-.card-header h5 {
+.card-header h5, #rubish {
     color: rgb(199, 17, 46);
 }
 .card-body {
@@ -72,7 +115,7 @@ svg {
     margin-right: 5px;
     cursor: pointer;
 }
-img {
+img,video {
     width: 100%;
     border-radius: 10px;
     box-shadow: 0px 0px 4px black;
@@ -84,4 +127,8 @@ span {
     position: relative;
     bottom: 3px
 }
+#rubish {
+    margin-right: 0px;
+}
+
 </style>
