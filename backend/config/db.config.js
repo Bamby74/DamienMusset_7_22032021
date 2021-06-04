@@ -1,8 +1,8 @@
 const {Sequelize} = require ('sequelize');
 
-const sequelize = new Sequelize('GROUPOMANIA','postgres', 'Damelis3', {
+const sequelize = new Sequelize("GROUPOMANIA",process.env.DB_USER, process.env.DB_PASSWORD, {
     dialect: 'postgres',
-    host:'localhost'
+    host: process.env.DB_HOST
 });
  sequelize.authenticate()
     .then(() => console.log('Connexion à la base de données réussie !'))
