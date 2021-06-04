@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const helmet = require('helmet')
 
 const publicationRoutes = require('./routes/publication');
 const userRoutes = require('./routes/user');
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
 
 app.use(express.urlencoded())
 app.use(express.json());
+app.use(helmet());
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
