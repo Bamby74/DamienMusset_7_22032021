@@ -1,4 +1,4 @@
-<template>
+g<template>
   <div id="app">
     <Navbar />
   </div>
