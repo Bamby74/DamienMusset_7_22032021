@@ -8,6 +8,7 @@ const publicationCtrl = require('../controllers/publication');
 router.get('/', auth, publicationCtrl.getPublication);
 router.get('/comments/:publicationId', auth, publicationCtrl.getOnePublication);
 router.post('/', auth, multer, publicationCtrl.createPublication);
+router.delete('/:publicationId', auth, publicationCtrl.deletePublication);
 
 
 module.exports = router ;

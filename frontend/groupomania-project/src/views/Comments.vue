@@ -3,23 +3,19 @@
         <section class="row">
             <Publication :publication="publication"/>
         </section>
-        <section class="row" v-for="comment in allComments" :key="comment.id">
-            <Comment v-if="allComments.length > 0" :comment="comment"/>
-            <p v-else>Soyez le premier à commenter cette publication !</p>
+        <section class="row" v-for="comment in allComments.slice().reverse()" :key="comment.id">
+            <Comment :comment="comment"/>
         </section>
-        <section class="row">
-            <WritingComment />
-        </section>
+        <WritingComment />
     </div>
 </template>
 
 <script>
 import axios from "axios";
-import { mapGetters, mapActions } from 'vuex';
 import Publication from "../components/Publication";
 import WritingComment from "../components/WritingComment";
 import Comment from "../components/Comment";
-import { token } from "../mixins/token";
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     name: "Comments",
@@ -40,6 +36,7 @@ export default {
         ...mapActions(['getComments', 'createComment']),
         getPublication() {
             let publicationId = localStorage.getItem('publicationId')
+            const token = localStorage.getItem('token');
             axios.get(`http://localhost:3000/api/publications/comments/${publicationId}`, {
                 headers: {
                 'Authorization' : 'Bearer '+token
