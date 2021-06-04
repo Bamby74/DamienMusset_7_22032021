@@ -11,6 +11,7 @@
                                 type="text"
                                 class="form-control"
                                 id="Name"
+                                name="name"
                                 required
                                 v-model.trim="name"
                             />
@@ -21,6 +22,7 @@
                                 type="text"
                                 class="form-control"
                                 id="Surname"
+                                name="surname"
                                 aria-describedby="emailHelp"
                                 required
                                 v-model.trim="surname"
@@ -32,6 +34,7 @@
                             type="text"
                             class="form-control"
                             id="userName"
+                            name="username"
                             aria-describedby="emailHelp"
                             required
                             v-model.trim="username"
@@ -43,6 +46,7 @@
                             type="email"
                             class="form-control"
                             id="exampleInputEmail1"
+                            name="email"
                             aria-describedby="emailHelp"
                             required
                             v-model.trim="email"
@@ -54,17 +58,18 @@
                         type="password"
                         class="form-control"
                         id="exampleInputPassword1"
+                        name="password"
                         required
                         v-model.trim="$v.password.model"
                         />
                     </div>
-                    <button class="btn btn-danger" @click.prevent="disconnect = true, opacity -= 0.9">
+                    <button data-message="Bouton pour valider la mise à jour" class="btn btn-danger" @click.prevent="beforeUpdated = true, opacity -= 0.9">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-bar-up" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M3.646 11.854a.5.5 0 0 0 .708 0L8 8.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708zM2.4 5.2c0 .22.18.4.4.4h10.4a.4.4 0 0 0 0-.8H2.8a.4.4 0 0 0-.4.4z"/>
                         </svg>
                         Mettre à jour
                     </button><br/>
-                    <button class="btn btn-dark" @click.prevent="disconnect = true, opacity -= 0.9" >
+                    <button data-message="Bouton pour supprimer le compte" class="btn btn-dark" @click.prevent="disconnect = true, opacity -= 0.9" >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                             <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                         </svg>
@@ -74,7 +79,8 @@
             </div>
         </div>
     </div>
-    <ValidationBox  v-if="disconnect" @delete-box="changeStyle" @delete-page="updatedUser" text=" Êtes-vous sûr(e) de vouloir supprimer votre compte?" requestYes="Oui" requestNo="Non"/>
+    <ValidationBox  v-if="disconnect" @delete-box="disconnect = false, opacity = 1" @delete-page="deleteUser" text=" Êtes-vous sûr(e) de vouloir supprimer votre compte?" requestYes="Oui" requestNo="Non"/>
+    <ValidationBox  v-if="beforeUpdated" @delete-box="beforeUpdated = false, opacity = 1" @delete-page="updateUser" text=" Confirmez-vous la mise à jour de votre profil?" requestYes="Oui" requestNo="Non"/>
     <div class="container">
         <div class="confirmation-case mx-auto" v-if="updated">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="green" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
@@ -88,7 +94,6 @@
 
 <script>
 import axios from 'axios';
-import { token } from '../mixins/token';
 import { mapActions } from 'vuex';
 import { required, minLength, alpha, email } from 'vuelidate/lib/validators';
 import ValidationBox from '../components/ValidationBox';
@@ -106,6 +111,7 @@ export default {
             password: "",
             id: "",
             disconnect: false,
+            beforeUpdated: false,
             updated: false,
             opacity: 1
         }
@@ -132,10 +138,11 @@ export default {
         minLength: minLength(8)
       }
     },
-    mixins: [token],
     methods: {
         ...mapActions(['checkNavButton']),
         updateUser() {
+        this.beforeUpdated = false
+        this.opacity -= 0.9
           const newUserProfil = {
             name: this.name,
             surname: this.surname,
@@ -146,6 +153,7 @@ export default {
           if(this.password){
             newUserProfil.password = this.password
           }
+          let token = localStorage.getItem('token')
           axios.put('http://localhost:3000/api/auth/profil', newUserProfil, {
             headers: {
               'Authorization' : 'Bearer '+token
@@ -160,11 +168,10 @@ export default {
           })
           .catch(error => console.log(error))
         },
-        changeStyle() {
-            this.opacity = 1
-            this.disconnect = false
-        },
         deleteUser() {
+            this.disconnect = true
+            this.opacity -= 0.9
+            let token = localStorage.getItem('token')
             axios.delete(`http://localhost:3000/api/auth/profil`, {
                 headers: {
                     'Authorization' : 'Bearer '+token
@@ -182,6 +189,7 @@ export default {
       this.checkNavButton();
     },
     mounted() {
+        let token = localStorage.getItem('token')
         axios.get('http://localhost:3000/api/auth/profil', {
             headers: {
                 'Authorization' : 'Bearer '+token

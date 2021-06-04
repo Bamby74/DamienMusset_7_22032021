@@ -2,8 +2,8 @@
     <div class="container">
         <article class="col-6 confirmation-case mx-auto">
             <p>{{ text }}</p>
-            <button id="yes" class="btn btn-success" @click.prevent="positiveResponse">{{ requestYes }}</button>
-            <button id="no" class="btn btn-danger" @click.prevent="negativeResponse">{{ requestNo }}</button>
+            <button data-message="Bouton oui" id="yes" class="btn btn-success" @click.prevent="positiveResponse">{{ requestYes }}</button>
+            <button data- message="Bouton non" id="no" class="btn btn-danger" @click.prevent="negativeResponse">{{ requestNo }}</button>
         </article>
     </div>
 </template>
