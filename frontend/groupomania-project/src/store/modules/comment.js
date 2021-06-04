@@ -30,7 +30,6 @@ const actions = {
             }
         })
         .then(createdComment => {
-            console.log(createdComment)
             let newComment = createdComment.data
             axios.get('http://localhost:3000/api/auth/profil', {
                 headers: { 
@@ -38,22 +37,42 @@ const actions = {
                 }
             })
             .then((user) => {
-                console.log(user)
                 newComment.username = user.data.username
-                console.log(newComment)
                 commit('addComment', newComment)
             })
             .catch(error => console.log(error))
-            // commit('addComment', newComment)
         })
         .catch(error => console.log(error))
+        
+    },
+    deleteComment({commit}, comment) {
+        const admin = localStorage.getItem('admin')
+        if(admin === 'true') {
+            const token = localStorage.getItem('token')
+            axios.delete(`http://localhost:3000/api/comments/${comment.id}`, {
+                headers: { 
+                    'Authorization' : 'Bearer '+token
+                }
+            }).then((commentDeleted) => {
+               if(commentDeleted) {
+                    commit('deletedComment', comment)
+               }
+            })
+        }
         
     }
 };
 
 const mutations = {
     setComments: (state, comments) => state.comments = comments,
-    addComment: (state, comment) => state.comments.unshift(comment)
+    addComment: (state, comment) => state.comments.push(comment),
+    deletedComment: (state, comment) => {
+        const goodComment = state.comments.find(c => c.id === comment.id);
+        let index = state.comments.indexOf(goodComment)
+        if(index > -1) {
+            state.comments.splice(index, 1)
+        }
+    }
 };
 
 export default {

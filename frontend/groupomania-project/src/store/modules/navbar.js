@@ -25,7 +25,6 @@ const mutations = {
     navButtonConnected: (state) => state.isConnected = true
 }
 
-
 export default {
     state, getters, actions, mutations
 }
