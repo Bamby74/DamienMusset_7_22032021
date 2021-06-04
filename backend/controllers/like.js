@@ -3,8 +3,7 @@ const User = require('../models/user');
 const Like = require('../models/like');
 
 exports.likePost = (req, res) => {
-    let publicationId = parseInt(req.params.publicationId);
-
+    let publicationId = parseInt(req.params.publicationId)
     if(publicationId <= 0){
         return res.status(400).json({ error: 'Paramètres invalides!' })
     }

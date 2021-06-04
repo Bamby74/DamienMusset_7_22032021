@@ -2,8 +2,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../config/db.config");
 const User = require("../models/user");
+require('dotenv').config();
 
-let JWT_TOKEN = "095883nedfnejcnjdw94584o2dmenx39r2";
+let JWT_TOKEN = process.env.TOKEN_KEY;
 
 exports.signup = (req, res, next) => {
   User.findOne({
@@ -23,16 +24,18 @@ exports.signup = (req, res, next) => {
           email: req.body.email,
           password: hash,
           username: req.body.username,
+          isAdmin: false
         };
-        let { name, surname, email, password, username } = data;
+        let { name, surname, email, password, username, isAdmin } = data;
         User.create({
           name,
           surname,
           email,
           password,
           username,
+          isAdmin
         })
-        .then((newUser) =>
+        .then((newUser) =>{
           res.status(201).json({ 
             userId: newUser.id,
             token: jwt.sign(
@@ -41,7 +44,7 @@ exports.signup = (req, res, next) => {
                 { expiresIn: "24h" }
               ),
           })
-        )
+        })
         .catch((error) =>
             res
               .status(400)
@@ -74,8 +77,9 @@ exports.login = (req, res) => {
                 token: jwt.sign(
                     { userId: userFound.id },
                     JWT_TOKEN,
-                    { expiresIn: "24h" }
-                ),
+                    { expiresIn: "24h" },
+                    ),
+                isAdmin: userFound.isAdmin
             });
           })
         .catch((error) => res.status(500).json({ error }));
