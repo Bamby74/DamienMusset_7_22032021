@@ -138,7 +138,8 @@ export default {
           surname: this.surname,
           username: this.username,
           email: this.email,
-          password: this.password
+          password: this.password,
+          isAdmin: false
       }, {
           headers: {
             'Content-Type': 'application/json'

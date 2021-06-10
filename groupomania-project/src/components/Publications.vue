@@ -3,6 +3,7 @@
         <div class="row" v-for="publication in allPublications.slice().reverse()" :key="publication.id">
             <Publication :publication="publication" />
         </div>
+        <span v-if="allPublications.length == 0" class=" col-6 mx-auto card border-success text-success">Soyez le premier à publier !</span>
     </section>
 </template>
 
